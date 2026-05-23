@@ -39,13 +39,9 @@ class HuggingFaceEngine:
         
         try:
             logger.info("Rewriting user query via HF Space...")
-            # We call the predict function from gradio space. 
-            # Gradio ChatInterface predict expects (message, history)
-            # For rewriting, history is empty.
             response = self.client.predict(
                 message=prompt,
-                history=[],
-                api_name="/chat"
+                api_name="/predict"
             )
             rewritten = response.strip()
             if rewritten:
@@ -80,9 +76,9 @@ class HuggingFaceEngine:
 
     def build_prompt(self, context: str, query: str, history: List[Dict[str, str]] = None) -> Dict:
         """
-        Constructs the structured message for Gradio ChatInterface.
-        Instead of a full message list, ChatInterface expects a current string `message` and a `history` list of tuples.
-        We'll pack this into a dict so `generate` can unpack it.
+        Constructs the structured message for the Gradio /predict endpoint.
+        The HF Space only accepts a single 'message' parameter, so we pack
+        everything (system instructions, context, history, and query) into one string.
         """
         system_prefix = (
             "You are a helpful, enthusiastic, and highly knowledgeable enterprise assistant for MMI (株式会社マン・マシンインターフェース, Man Machine Interface).\n"
@@ -93,24 +89,22 @@ class HuggingFaceEngine:
         )
         
         user_content = system_prefix
+
+        # Include chat history as part of the prompt text
+        if history:
+            user_content += "CHAT HISTORY:\n"
+            for msg in history:
+                role = msg.get("role", "user")
+                content = msg.get("content", "")
+                user_content += f"  {role}: {content}\n"
+            user_content += "\n"
+
         if context.strip():
             user_content += f"CONTEXT:\n{context}\n\n"
         user_content += f"QUESTION: {query}"
         
-        # Format history into [[user, bot], [user, bot]] for Gradio ChatInterface
-        gradio_history = []
-        if history:
-            # Ensure history is pairs
-            current_pair = []
-            for msg in history:
-                current_pair.append(msg.get("content", ""))
-                if len(current_pair) == 2:
-                    gradio_history.append(current_pair)
-                    current_pair = []
-        
         return {
-            "message": user_content,
-            "history": gradio_history
+            "message": user_content
         }
 
     def generate(self, prompt_data: Dict) -> Dict:
@@ -120,8 +114,7 @@ class HuggingFaceEngine:
         try:
             response = self.client.predict(
                 message=prompt_data["message"],
-                history=prompt_data["history"],
-                api_name="/chat"
+                api_name="/predict"
             )
             return {
                 "text": response,
@@ -134,24 +127,15 @@ class HuggingFaceEngine:
     def generate_stream(self, prompt_data: Dict) -> Generator[str, None, None]:
         """
         Streams response tokens back in Real-time.
-        Gradio ChatInterface returns full accumulated strings at each step, not delta tokens.
-        We must yield deltas for our SSE stream to work exactly as Ollama did.
+        Since /predict is a non-streaming endpoint, we call it synchronously
+        and yield the full response as a single chunk.
         """
         try:
-            job = self.client.submit(
+            response = self.client.predict(
                 message=prompt_data["message"],
-                history=prompt_data["history"],
-                api_name="/chat"
+                api_name="/predict"
             )
-            
-            previous_text = ""
-            for update in job:
-                # 'update' is the full string accumulated so far
-                if update:
-                    new_chunk = update[len(previous_text):]
-                    if new_chunk:
-                        yield new_chunk
-                        previous_text = update
+            yield response
                         
         except Exception as e:
             logger.error(f"Streaming error from HF Space: {e}")
