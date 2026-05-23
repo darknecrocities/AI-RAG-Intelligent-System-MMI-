@@ -9,36 +9,26 @@ import config
 
 logger = logging.getLogger(__name__)
 
-# Conditionally import sentence-transformers (only in full mode)
-SentenceTransformer = None
-if not config.LIGHTWEIGHT_MODE:
-    try:
-        from sentence_transformers import SentenceTransformer as _ST
-        SentenceTransformer = _ST
-    except ImportError:
-        logger.warning("sentence-transformers not installed. Falling back to HF Inference API for embeddings.")
+from sentence_transformers import SentenceTransformer
 
 
 class VectorDB:
     def __init__(self):
         self.model_name = config.EMBEDDING_MODEL
         self.db_path = config.VECTOR_DB_PATH
-        self.lightweight = config.LIGHTWEIGHT_MODE or SentenceTransformer is None
         self.model = None
         self.dimension = 384  # default for all-MiniLM-L6-v2
 
-        if not self.lightweight:
-            logger.info(f"Loading embedding model: {self.model_name}...")
-            try:
-                self.model = SentenceTransformer(self.model_name, local_files_only=True)
-                logger.info("Successfully loaded embedding model from local cache.")
-            except Exception as e:
-                logger.warning(f"Failed to load embedding model from local cache ({e}). Attempting online download/update...")
-                self.model = SentenceTransformer(self.model_name, local_files_only=False)
-                logger.info("Successfully loaded embedding model online.")
-            self.dimension = self.model.get_sentence_embedding_dimension()
-        else:
-            logger.info("LIGHTWEIGHT_MODE: Using HuggingFace Inference API for embeddings (no local model loaded).")
+        logger.info(f"Loading embedding model: {self.model_name}...")
+        try:
+            self.model = SentenceTransformer(self.model_name, local_files_only=True)
+            logger.info("Successfully loaded embedding model from local cache.")
+        except Exception as e:
+            logger.warning(f"Failed to load embedding model from local cache ({e}). Attempting online download/update...")
+            self.model = SentenceTransformer(self.model_name, local_files_only=False)
+            logger.info("Successfully loaded embedding model online.")
+        
+        self.dimension = self.model.get_embedding_dimension()
 
         self.index = None
         self.metadata = []
@@ -51,32 +41,11 @@ class VectorDB:
     def _get_metadata_file(self) -> str:
         return os.path.join(self.db_path, "metadata.json")
 
-    def _embed_via_hf_api(self, texts: List[str]) -> np.ndarray:
-        """
-        Calls the free HuggingFace Inference API for feature-extraction embeddings.
-        No API key required for public models.
-        """
-        api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{self.model_name}"
-        headers = {"Content-Type": "application/json"}
-
-        # HF API key is optional but avoids rate limits
-        hf_token = os.getenv("HF_TOKEN", "")
-        if hf_token:
-            headers["Authorization"] = f"Bearer {hf_token}"
-
-        response = http_requests.post(api_url, headers=headers, json={"inputs": texts, "options": {"wait_for_model": True}}, timeout=60)
-        response.raise_for_status()
-        embeddings = np.array(response.json(), dtype="float32")
-        return embeddings
-
     def _encode(self, texts: List[str]) -> np.ndarray:
         """
-        Encode texts into embeddings. Uses local model or HF API depending on mode.
+        Encode texts into embeddings using the local model.
         """
-        if not self.lightweight and self.model:
-            return self.model.encode(texts, convert_to_numpy=True)
-        else:
-            return self._embed_via_hf_api(texts)
+        return self.model.encode(texts, convert_to_numpy=True)
 
     def load_index(self):
         """

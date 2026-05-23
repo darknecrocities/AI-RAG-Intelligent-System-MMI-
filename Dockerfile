@@ -13,9 +13,12 @@ WORKDIR /app
 # Enable lightweight mode (uses local CPU PyTorch for embeddings but no CrossEncoder/LLM)
 ENV LIGHTWEIGHT_MODE=false
 
-# Copy lean requirements and install dependencies (no PyTorch!)
+# Copy lean requirements and install dependencies
 COPY requirements-render.txt .
 RUN pip install --no-cache-dir -r requirements-render.txt
+
+# Pre-download and cache the embedding model to ensure 100% local, offline embedding execution
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
 
 # Copy application files
 COPY . .
