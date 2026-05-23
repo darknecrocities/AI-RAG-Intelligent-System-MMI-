@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.log
+venv/
+data/faiss_index/
+data/crawl_cache.json

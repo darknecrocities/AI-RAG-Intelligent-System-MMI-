@@ -10,3 +10,4 @@ sentence-transformers>=2.2.0
 faiss-cpu>=1.7.4
 numpy>=1.24.0
 redis>=5.0.0
+ollama>=0.4.0

@@ -54,12 +54,15 @@ llm_engine = OllamaEngine()
 crawler = WebCrawler()
 
 # Keep track of ingestion state
+existing_chunks = vector_db.index.ntotal if vector_db.index else 0
+existing_pages = len(crawler.cache) if crawler.cache else 0
+
 ingestion_status = {
-    "status": "idle", # idle, ingesting, completed, failed
-    "pages_processed": 0,
-    "chunks_added": 0,
+    "status": "completed" if existing_chunks > 0 else "idle",
+    "pages_processed": existing_pages,
+    "chunks_added": existing_chunks,
     "last_error": None,
-    "last_ingested": None
+    "last_ingested": "Previously loaded" if existing_chunks > 0 else None
 }
 
 class ChatMessage(BaseModel):
@@ -218,14 +221,11 @@ def chat(request: ChatRequest):
     logger.info(f"Searching vector database for: '{optimized_query}'...")
     retrieved_chunks = retriever.retrieve(optimized_query, top_k=5)
     
-    if not retrieved_chunks:
-        return {
-            "answer": "Not found in knowledge base.",
-            "sources": []
-        }
-
     # 4. Context Compression
-    compressed_context = llm_engine.compress_context(retrieved_chunks)
+    if retrieved_chunks:
+        compressed_context = llm_engine.compress_context(retrieved_chunks)
+    else:
+        compressed_context = ""
     
     # Convert history models to raw dicts for prompt builder
     history_dicts = []

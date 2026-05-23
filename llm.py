@@ -1,15 +1,15 @@
 import json
 import logging
 from typing import List, Dict, Generator
-import requests
+from ollama import Client
 import config
 
 logger = logging.getLogger(__name__)
 
 class OllamaEngine:
     def __init__(self):
-        self.api_url = f"{config.OLLAMA_API_URL}/api/generate"
         self.model = config.OLLAMA_MODEL
+        self.client = Client(host=config.OLLAMA_API_URL)
         self._check_ollama_connection()
 
     def _check_ollama_connection(self) -> bool:
@@ -17,10 +17,9 @@ class OllamaEngine:
         Verifies if Ollama is running and handles model status logging.
         """
         try:
-            r = requests.get(config.OLLAMA_API_URL, timeout=3)
-            if r.status_code == 200:
-                logger.info("Successfully connected to local Ollama daemon.")
-                return True
+            self.client.list()
+            logger.info("Successfully connected to local Ollama daemon.")
+            return True
         except Exception as e:
             logger.error(f"Failed to connect to local Ollama daemon at {config.OLLAMA_API_URL}: {e}")
         return False
@@ -40,26 +39,24 @@ class OllamaEngine:
         
         try:
             logger.info("Rewriting user query...")
-            payload = {
-                "model": self.model,
-                "prompt": prompt,
-                "stream": False,
-                "options": {
+            response = self.client.generate(
+                model=self.model,
+                prompt=prompt,
+                options={
                     "temperature": 0.1
                 }
-            }
-            r = requests.post(self.api_url, json=payload, timeout=10)
-            if r.status_code == 200:
-                rewritten = r.json().get("response", "").strip()
-                if rewritten:
-                    # Strip any outer quotes if LLM added them
-                    rewritten = rewritten.strip('"').strip("'")
-                    logger.info(f"Rewritten query: '{query}' -> '{rewritten}'")
-                    return rewritten
+            )
+            rewritten = response.response.strip()
+            if rewritten:
+                # Strip any outer quotes if LLM added them
+                rewritten = rewritten.strip('"').strip("'")
+                logger.info(f"Rewritten query: '{query}' -> '{rewritten}'")
+                return rewritten
         except Exception as e:
             logger.warning(f"Failed to rewrite query: {e}. Using original query.")
             
         return query
+
 
     def compress_context(self, chunks: List[Dict], max_tokens: int = 2500) -> str:
         """
@@ -85,83 +82,83 @@ class OllamaEngine:
             
         return "\n\n---\n\n".join(context_blocks)
 
-    def build_prompt(self, context: str, query: str, history: List[Dict[str, str]] = None) -> str:
+    def build_prompt(self, context: str, query: str, history: List[Dict[str, str]] = None) -> List[Dict]:
         """
-        Constructs the standard RAG prompt template.
+        Constructs the structured message list for Ollama Chat API.
         """
-        history_str = ""
+        messages = []
+        
+        # System instructions
+        system_content = (
+            "You are a helpful, enthusiastic, and highly knowledgeable enterprise assistant for MMI (株式会社マン・マシンインターフェース, Man Machine Interface).\n"
+            "INSTRUCTIONS:\n"
+            "1. If the question is conversational (e.g., greetings, small talk) or refers to your previous messages, reply naturally, warmly, and briefly based on the CHAT HISTORY.\n"
+            "2. If the question is about the company, its products, services, or philosophy, answer using ONLY the provided CONTEXT. "
+            "If the information is not present in the CONTEXT, politely explain that you don't have that specific information right now, but offer to help with other related topics. "
+            "Always maintain a polite, professional, and friendly tone."
+        )
+        messages.append({"role": "system", "content": system_content})
+        
+        # Append chat history before the current message
         if history:
             for msg in history:
-                role = "User" if msg.get("role") == "user" else "Assistant"
-                content = msg.get("content", "")
-                history_str += f"{role}: {content}\n"
-        else:
-            history_str = "No previous history."
-
-        prompt = (
-            "You are a precise enterprise knowledge assistant for MMI (株式会社マン・マシンインターフェース).\n"
-            "INSTRUCTIONS:\n"
-            "1. If the question is conversational (e.g., greetings, talking about past chat, small talk) or refers to your previous messages, reply naturally, warmly, and briefly based on the CHAT HISTORY.\n"
-            "2. If the question is about the company, its products, or services, answer using ONLY the provided CONTEXT. If not present in the CONTEXT, state 'Not found in knowledge base'. Be concise and factual.\n\n"
-            f"CHAT HISTORY:\n{history_str}\n\n"
-            f"CONTEXT:\n{context}\n\n"
-            f"QUESTION: {query}\n\n"
-            "Answer:"
-        )
-        return prompt
-
-    def generate(self, prompt: str) -> Dict:
-        """
-        Generates a response synchronously.
-        """
-        payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.2
-            }
-        }
+                role = "user" if msg.get("role") == "user" else "assistant"
+                messages.append({"role": role, "content": msg.get("content", "")})
+                
+        # Append the current query and context
+        user_content = ""
+        if context.strip():
+            user_content += f"CONTEXT:\n{context}\n\n"
+        user_content += f"QUESTION: {query}"
+        messages.append({"role": "user", "content": user_content})
         
+        return messages
+
+    def generate(self, messages: List[Dict]) -> Dict:
+        """
+        Generates a response synchronously using /api/chat.
+        """
+        # Backward compatibility check
+        if isinstance(messages, str):
+            messages = [{"role": "user", "content": messages}]
+
         try:
-            r = requests.post(self.api_url, json=payload, timeout=30)
-            if r.status_code == 200:
-                response_json = r.json()
-                return {
-                    "text": response_json.get("response", ""),
-                    "done": True
+            response = self.client.chat(
+                model=self.model,
+                messages=messages,
+                options={
+                    "temperature": 0.2
                 }
-            else:
-                return {"text": f"Error from Ollama: {r.status_code}", "done": True}
+            )
+            return {
+                "text": response.message.content,
+                "done": True
+            }
         except Exception as e:
             logger.error(f"Error calling Ollama: {e}")
             return {"text": f"Error contacting local LLM daemon: {e}", "done": True}
 
-    def generate_stream(self, prompt: str) -> Generator[str, None, None]:
+    def generate_stream(self, messages: List[Dict]) -> Generator[str, None, None]:
         """
-        Streams response tokens back in Real-time.
+        Streams response tokens back in Real-time using /api/chat.
         """
-        payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": True,
-            "options": {
-                "temperature": 0.2
-            }
-        }
-        
+        # Backward compatibility check
+        if isinstance(messages, str):
+            messages = [{"role": "user", "content": messages}]
+
         try:
-            r = requests.post(self.api_url, json=payload, stream=True, timeout=30)
-            if r.status_code == 200:
-                for line in r.iter_lines():
-                    if line:
-                        chunk = json.loads(line.decode("utf-8"))
-                        token = chunk.get("response", "")
-                        yield token
-                        if chunk.get("done", False):
-                            break
-            else:
-                yield f"Error from Ollama: {r.status_code}"
+            response_stream = self.client.chat(
+                model=self.model,
+                messages=messages,
+                stream=True,
+                options={
+                    "temperature": 0.2
+                }
+            )
+            for chunk in response_stream:
+                token = chunk.message.content
+                yield token
         except Exception as e:
             logger.error(f"Streaming error from Ollama: {e}")
             yield f"\n[Error communicating with Ollama: {e}]"
+

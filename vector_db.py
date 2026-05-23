@@ -15,7 +15,13 @@ class VectorDB:
         self.db_path = config.VECTOR_DB_PATH
         
         logger.info(f"Loading embedding model: {self.model_name}...")
-        self.model = SentenceTransformer(self.model_name)
+        try:
+            self.model = SentenceTransformer(self.model_name, local_files_only=True)
+            logger.info("Successfully loaded embedding model from local cache.")
+        except Exception as e:
+            logger.warning(f"Failed to load embedding model from local cache ({e}). Attempting online download/update...")
+            self.model = SentenceTransformer(self.model_name, local_files_only=False)
+            logger.info("Successfully loaded embedding model online.")
         self.dimension = self.model.get_sentence_embedding_dimension()
         
         self.index = None

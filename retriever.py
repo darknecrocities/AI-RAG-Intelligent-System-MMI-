@@ -14,8 +14,13 @@ class HybridRetriever:
         
         try:
             logger.info(f"Loading Cross-Encoder model: {self.cross_encoder_name}...")
-            self.cross_encoder = CrossEncoder(self.cross_encoder_name)
-            logger.info("Cross-Encoder model loaded successfully.")
+            try:
+                self.cross_encoder = CrossEncoder(self.cross_encoder_name, local_files_only=True)
+                logger.info("Cross-Encoder model loaded successfully from local cache.")
+            except Exception as e:
+                logger.warning(f"Failed to load Cross-Encoder from local cache ({e}). Attempting online download/update...")
+                self.cross_encoder = CrossEncoder(self.cross_encoder_name, local_files_only=False)
+                logger.info("Cross-Encoder model loaded successfully online.")
         except Exception as e:
             logger.warning(f"Failed to load Cross-Encoder: {e}. Falling back to standard keyword-boosted cosine search.")
 

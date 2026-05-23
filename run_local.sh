@@ -28,18 +28,36 @@ else
     exit 1
 fi
 
-# 3. Pull Llama3.2 model in the background (with auto-retry)
-echo "[+] Starting model 'llama3.2' download in the background..."
-echo "[+] It will automatically resume if the connection drops."
-echo "[+] You can monitor download logs by running: tail -f ollama_pull.log"
-(
-    until ollama pull llama3.2 > ollama_pull.log 2>&1; do
-        echo "[!] Pull failed or interrupted. Retrying in 5 seconds..." >> ollama_pull.log
-        sleep 5
-    done
-    echo "✓ Model llama3.2 is ready." >> ollama_pull.log
-) &
+# 3. Detect available models and ensure primary model exists
+echo "[+] Detecting best available model..."
+EXISTING_MODELS=$(curl -s http://localhost:11434/api/tags | grep -o '"name":"[^"]*"' | cut -d'"' -f4)
 
+if echo "$EXISTING_MODELS" | grep -q "llama3.2"; then
+    echo "✓ Model 'llama3.2' found."
+    export MODEL_NAME="llama3.2"
+elif echo "$EXISTING_MODELS" | grep -q "qwen2.5"; then
+    AVAILABLE=$(echo "$EXISTING_MODELS" | grep "qwen2.5" | head -1)
+    echo "⚠️  llama3.2 not ready yet. Falling back to: ${AVAILABLE}"
+    export MODEL_NAME="${AVAILABLE}"
+else
+    echo "[+] No suitable model found. Pulling llama3.2 now (this may take a while)..."
+    ollama pull llama3.2
+    export MODEL_NAME="llama3.2"
+fi
+echo "[+] Using model: $MODEL_NAME"
+
+# Pull llama3.2 in background if we're currently using a fallback
+if [ "$MODEL_NAME" != "llama3.2" ]; then
+    echo "[+] Downloading llama3.2 in background..."
+    echo "[+] Monitor: tail -f ollama_pull.log"
+    (
+        until ollama pull llama3.2 >> ollama_pull.log 2>&1; do
+            echo "[!] Pull interrupted. Retrying in 5 seconds..." >> ollama_pull.log
+            sleep 5
+        done
+        echo "✓ llama3.2 is ready! Restart the server to use it." >> ollama_pull.log
+    ) &
+fi
 
 # 4. Activate Virtual Environment and Launch Uvicorn
 if [ -d "venv" ]; then
@@ -50,8 +68,7 @@ else
     exit 1
 fi
 
-echo "[+] Starting FastAPI server and mounting Web Dashboard..."
+echo "[+] Starting FastAPI server (model: ${MODEL_NAME})..."
 echo "👉 Open your browser at http://127.0.0.1:8000/"
 echo "---------------------------------------------------------"
-exec uvicorn api:app --host 127.0.0.1 --port 8000
-
+exec env OLLAMA_MODEL="${MODEL_NAME}" uvicorn api:app --host 127.0.0.1 --port 8000
