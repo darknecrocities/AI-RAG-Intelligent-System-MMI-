@@ -15,9 +15,14 @@ for i in {1..30}; do
     sleep 2
 done
 
-# Pull the model configured in config.py
+# Pull the model configured in config.py (with auto-retry)
 echo "[+] Pulling Ollama model llama3.2..."
-ollama pull llama3.2
+until ollama pull llama3.2; do
+    echo "[!] Pull failed. Retrying..."
+    sleep 5
+done
+
+
 
 
 # Start the FastAPI application on port 8000
