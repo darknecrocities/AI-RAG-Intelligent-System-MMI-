@@ -9,7 +9,8 @@ HF_SPACE_URL = os.getenv("HF_SPACE_URL", "Darknecrocities/mmi2")
 
 # Embeddings and Reranking models
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-CROSS_ENCODER_MODEL = os.getenv("CROSS_ENCODER_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
+# Disable Cross Encoder by default to avoid Out of Memory (OOM) on 512MB RAM instances
+CROSS_ENCODER_MODEL = os.getenv("CROSS_ENCODER_MODEL", "")
 
 # Chunking settings
 CHUNK_SIZE = 600       # target token length for chunks
