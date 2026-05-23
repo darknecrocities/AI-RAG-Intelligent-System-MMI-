@@ -146,3 +146,37 @@ python chatbot.py
 - 💬 **Interactive Chat Area**: Chat with the agent, enjoy smooth response streaming, and view conversation-history-grounded answers.
 - 🔗 **Citations Viewer**: Examine the grounded page links, titles, sections, and relevance match scores for every source used.
 - 🩺 **Health Monitor**: Live status checks for Ollama connectivity, Redis connection, and the total indexed vector count.
+
+---
+
+## 🐳 Docker & Container Deployment (Render / Railway / VPS)
+
+For persistent cloud deployments (such as Render, Railway, or a standard VPS), we have packaged the entire application—including the FastAPI server, the static dashboard UI, and a self-contained Ollama instance—into a container using a [Dockerfile](file:///Users/arronkianparejas/RAG(MMI)/Dockerfile) and [entrypoint.sh](file:///Users/arronkianparejas/RAG(MMI)/entrypoint.sh) script.
+
+### 1. How it works
+- The container base is a lightweight Python image.
+- It automatically installs the system dependencies (like `libgomp1` for FAISS vector search acceleration).
+- It installs the Ollama binary inside the container.
+- When the container starts, the `entrypoint.sh` script runs `ollama serve` in the background, waits for it to become ready, pulls the `qwen2.5:0.5b` model, and then starts the FastAPI server.
+- The web app dashboard is served directly from the container via FastAPI's static mount on port `8000`.
+
+### 2. Build & Run Locally with Docker
+You can test the containerized RAG system locally by building and running the Docker image:
+```bash
+# Build the Docker image
+docker build -t mmi-rag-chatbot .
+
+# Run the container (mapping port 8000)
+docker run -p 8000:8000 mmi-rag-chatbot
+```
+Once started, visit **`http://localhost:8000/`** to interact with the dashboard.
+
+### 3. Deploy to Render or Railway
+To deploy to a persistent container service:
+1. **GitHub Sync**: Connect your repository containing the `Dockerfile` and `entrypoint.sh` to your Render or Railway dashboard.
+2. **Setup Service**: Create a new Web Service or Deployment from the connected repository. Render/Railway will automatically detect the `Dockerfile` and build it.
+3. **Configure Resources**: 
+   - Running local LLMs and embeddings pipelines requires CPU and memory resources. Ensure your service instance has at least **1.5 GB to 2 GB of RAM** to prevent Out-Of-Memory (OOM) crashes when loading the models.
+4. **Environment Variables** (Optional):
+   - You can customize configuration items by setting environment variables matching those in `config.py` (e.g. `OLLAMA_MODEL`, `REDIS_URL`, `DATA_DIR`).
+
