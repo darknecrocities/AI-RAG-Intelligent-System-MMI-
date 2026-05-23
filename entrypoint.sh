@@ -15,9 +15,10 @@ for i in {1..30}; do
     sleep 2
 done
 
-# Pull the lightweight model configured in config.py
-echo "[+] Pulling Ollama model qwen2.5:0.5b..."
-ollama pull qwen2.5:0.5b
+# Pull the model configured in config.py
+echo "[+] Pulling Ollama model llama3.2..."
+ollama pull llama3.2
+
 
 # Start the FastAPI application on port 8000
 echo "[+] Starting FastAPI Application..."
