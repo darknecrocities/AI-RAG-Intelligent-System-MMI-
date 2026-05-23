@@ -28,16 +28,17 @@ else
     exit 1
 fi
 
-# 3. Pull Llama3.2 model if not present (with auto-retry)
-echo "[+] Ensuring model 'llama3.2' is downloaded..."
-echo "[+] This will automatically resume if the connection drops."
-until ollama pull llama3.2; do
-    echo "[!] Pull failed or interrupted. Retrying in 5 seconds..."
-    sleep 5
-done
-echo "✓ Model llama3.2 is ready."
-
-
+# 3. Pull Llama3.2 model in the background (with auto-retry)
+echo "[+] Starting model 'llama3.2' download in the background..."
+echo "[+] It will automatically resume if the connection drops."
+echo "[+] You can monitor download logs by running: tail -f ollama_pull.log"
+(
+    until ollama pull llama3.2; do
+        echo "[!] Pull failed or interrupted. Retrying in 5 seconds..." >> ollama_pull.log
+        sleep 5
+    done
+    echo "✓ Model llama3.2 is ready." >> ollama_pull.log
+) &
 
 # 4. Activate Virtual Environment and Launch Uvicorn
 if [ -d "venv" ]; then
