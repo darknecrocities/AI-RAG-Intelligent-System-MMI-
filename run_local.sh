@@ -53,4 +53,5 @@ fi
 echo "[+] Starting FastAPI server and mounting Web Dashboard..."
 echo "👉 Open your browser at http://127.0.0.1:8000/"
 echo "---------------------------------------------------------"
-exec uvicorn api:app --host 127.0.0.1 --port 8000 --reload
+exec uvicorn api:app --host 127.0.0.1 --port 8000
+
