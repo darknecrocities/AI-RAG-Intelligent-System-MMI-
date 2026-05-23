@@ -147,15 +147,15 @@ def run_tests():
         logger.error(f"✗ Hybrid Retriever test failed: {e}")
         return False
 
-    # 7. Check Ollama Connection status
+    # 7. Check HuggingFace Engine status
     try:
         import llm
-        engine = llm.OllamaEngine()
-        ollama_ok = engine._check_ollama_connection()
-        if ollama_ok:
-            logger.info("✓ LLM Engine: Connection to Ollama verified.")
+        engine = llm.HuggingFaceEngine()
+        hf_ok = engine._check_hf_connection()
+        if hf_ok:
+            logger.info("✓ LLM Engine: Connection to Hugging Face Space verified.")
         else:
-            logger.warning("! LLM Engine: Ollama connection could not be established. Ensure Ollama is running.")
+            logger.warning("! LLM Engine: Hugging Face Space connection could not be established.")
     except Exception as e:
         logger.error(f"✗ LLM Engine test failed: {e}")
         return False
