@@ -33,12 +33,13 @@ echo "[+] Starting model 'llama3.2' download in the background..."
 echo "[+] It will automatically resume if the connection drops."
 echo "[+] You can monitor download logs by running: tail -f ollama_pull.log"
 (
-    until ollama pull llama3.2; do
+    until ollama pull llama3.2 > ollama_pull.log 2>&1; do
         echo "[!] Pull failed or interrupted. Retrying in 5 seconds..." >> ollama_pull.log
         sleep 5
     done
     echo "✓ Model llama3.2 is ready." >> ollama_pull.log
 ) &
+
 
 # 4. Activate Virtual Environment and Launch Uvicorn
 if [ -d "venv" ]; then
