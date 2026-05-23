@@ -175,8 +175,12 @@ Once started, visit **`http://localhost:8000/`** to interact with the dashboard.
 To deploy to a persistent container service:
 1. **GitHub Sync**: Connect your repository containing the `Dockerfile` and `entrypoint.sh` to your Render or Railway dashboard.
 2. **Setup Service**: Create a new Web Service or Deployment from the connected repository. Render/Railway will automatically detect the `Dockerfile` and build it.
-3. **Configure Resources**: 
-   - Running local LLMs and embeddings pipelines requires CPU and memory resources. Ensure your service instance has at least **1.5 GB to 2 GB of RAM** to prevent Out-Of-Memory (OOM) crashes when loading the models.
+3. **Configure Resources (CRITICAL)**: 
+   > [!WARNING]
+   > **Render's Free Tier (512MB RAM) will crash with an Out-of-Memory (OOM) error** when loading PyTorch, the SentenceTransformers, the CrossEncoder, and the Ollama LLM.
+   - **Render**: You must select the **Starter Instance Plan** (or higher) which offers at least **2 GB of RAM** to run this local model pipeline successfully.
+   - **Railway**: Ensure your resource limits are configured to allow at least **1.5 GB to 2 GB of RAM** for the container.
 4. **Environment Variables** (Optional):
    - You can customize configuration items by setting environment variables matching those in `config.py` (e.g. `OLLAMA_MODEL`, `REDIS_URL`, `DATA_DIR`).
+
 
