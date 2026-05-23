@@ -1,5 +1,9 @@
 // MMI Knowledge Assistant Frontend Logic
 
+// Set this to your backend Render URL (e.g. "https://mmi-rag-backend.onrender.com") if hosting the frontend on Vercel.
+// Otherwise, keep it empty "" to use the same host.
+const API_BASE_URL = "";
+
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
   const badgeOllama = document.getElementById("badge-ollama");
@@ -85,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // System Health Checker
   async function checkSystemHealth() {
     try {
-      const response = await fetch("/health");
+      const response = await fetch(`${API_BASE_URL}/health`);
       if (!response.ok) throw new Error("Health check returned error");
       const health = await response.json();
       
@@ -123,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Poll Ingestion Status
   async function pollIngestionStatus() {
     try {
-      const response = await fetch("/ingest/status");
+      const response = await fetch(`${API_BASE_URL}/ingest/status`);
       const status = await response.json();
       
       // Update stats and progress bar
@@ -183,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     
     try {
-      const response = await fetch("/ingest", {
+      const response = await fetch(`${API_BASE_URL}/ingest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -283,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (streamResponse) {
       // SSE Streaming Mode
       try {
-        const response = await fetch("/chat", {
+        const response = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
@@ -345,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Standard Synchronous Mode
       try {
-        const response = await fetch("/chat", {
+        const response = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
