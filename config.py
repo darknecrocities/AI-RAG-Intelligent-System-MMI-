@@ -6,6 +6,9 @@ BASE_URL = "https://www.mmi-sc.co.jp/"
 # Hugging Face Space Settings
 HF_SPACE_URL = os.getenv("HF_SPACE_URL", "Darknecrocities/mmi2")
 
+# Lightweight mode: skip loading PyTorch/sentence-transformers locally,
+# use HuggingFace Inference API for embeddings instead (for 512MB RAM hosts like Render free tier)
+LIGHTWEIGHT_MODE = os.getenv("LIGHTWEIGHT_MODE", "false").lower() == "true"
 
 # Embeddings and Reranking models
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")

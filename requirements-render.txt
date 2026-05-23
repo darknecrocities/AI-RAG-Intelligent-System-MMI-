@@ -1,0 +1,14 @@
+# Lightweight requirements for Render deployment (no PyTorch/sentence-transformers)
+# Uses HuggingFace Inference API for embeddings instead of local models
+fastapi>=0.100.0
+uvicorn>=0.22.0
+sse-starlette>=1.6.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+trafilatura>=1.6.0
+langdetect>=1.0.9
+deep-translator>=1.11.0
+faiss-cpu>=1.7.4
+numpy>=1.24.0
+redis>=5.0.0
+gradio_client>=0.16.0

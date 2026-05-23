@@ -1,17 +1,29 @@
 import logging
 import re
 from typing import List, Dict
-from sentence_transformers import CrossEncoder
 import config
 
 logger = logging.getLogger(__name__)
 
+# Conditionally import CrossEncoder (only in full mode)
+CrossEncoder = None
+if not config.LIGHTWEIGHT_MODE:
+    try:
+        from sentence_transformers import CrossEncoder as _CE
+        CrossEncoder = _CE
+    except ImportError:
+        logger.warning("sentence-transformers not installed. CrossEncoder reranking disabled.")
 class HybridRetriever:
     def __init__(self, vector_db):
         self.vector_db = vector_db
         self.cross_encoder_name = config.CROSS_ENCODER_MODEL
         self.cross_encoder = None
         
+        # Skip loading if CrossEncoder class is unavailable or model name is empty
+        if not CrossEncoder or not self.cross_encoder_name:
+            logger.info("Cross-Encoder reranking disabled (lightweight mode or no model configured).")
+            return
+            
         try:
             logger.info(f"Loading Cross-Encoder model: {self.cross_encoder_name}...")
             try:

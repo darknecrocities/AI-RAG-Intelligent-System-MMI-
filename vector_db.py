@@ -4,29 +4,45 @@ import logging
 from typing import List, Dict, Tuple
 import numpy as np
 import faiss
-from sentence_transformers import SentenceTransformer
+import requests as http_requests
 import config
 
 logger = logging.getLogger(__name__)
+
+# Conditionally import sentence-transformers (only in full mode)
+SentenceTransformer = None
+if not config.LIGHTWEIGHT_MODE:
+    try:
+        from sentence_transformers import SentenceTransformer as _ST
+        SentenceTransformer = _ST
+    except ImportError:
+        logger.warning("sentence-transformers not installed. Falling back to HF Inference API for embeddings.")
+
 
 class VectorDB:
     def __init__(self):
         self.model_name = config.EMBEDDING_MODEL
         self.db_path = config.VECTOR_DB_PATH
-        
-        logger.info(f"Loading embedding model: {self.model_name}...")
-        try:
-            self.model = SentenceTransformer(self.model_name, local_files_only=True)
-            logger.info("Successfully loaded embedding model from local cache.")
-        except Exception as e:
-            logger.warning(f"Failed to load embedding model from local cache ({e}). Attempting online download/update...")
-            self.model = SentenceTransformer(self.model_name, local_files_only=False)
-            logger.info("Successfully loaded embedding model online.")
-        self.dimension = self.model.get_sentence_embedding_dimension()
-        
+        self.lightweight = config.LIGHTWEIGHT_MODE or SentenceTransformer is None
+        self.model = None
+        self.dimension = 384  # default for all-MiniLM-L6-v2
+
+        if not self.lightweight:
+            logger.info(f"Loading embedding model: {self.model_name}...")
+            try:
+                self.model = SentenceTransformer(self.model_name, local_files_only=True)
+                logger.info("Successfully loaded embedding model from local cache.")
+            except Exception as e:
+                logger.warning(f"Failed to load embedding model from local cache ({e}). Attempting online download/update...")
+                self.model = SentenceTransformer(self.model_name, local_files_only=False)
+                logger.info("Successfully loaded embedding model online.")
+            self.dimension = self.model.get_sentence_embedding_dimension()
+        else:
+            logger.info("LIGHTWEIGHT_MODE: Using HuggingFace Inference API for embeddings (no local model loaded).")
+
         self.index = None
         self.metadata = []
-        
+
         self.load_index()
 
     def _get_index_file(self) -> str:
@@ -34,6 +50,33 @@ class VectorDB:
 
     def _get_metadata_file(self) -> str:
         return os.path.join(self.db_path, "metadata.json")
+
+    def _embed_via_hf_api(self, texts: List[str]) -> np.ndarray:
+        """
+        Calls the free HuggingFace Inference API for feature-extraction embeddings.
+        No API key required for public models.
+        """
+        api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{self.model_name}"
+        headers = {"Content-Type": "application/json"}
+
+        # HF API key is optional but avoids rate limits
+        hf_token = os.getenv("HF_TOKEN", "")
+        if hf_token:
+            headers["Authorization"] = f"Bearer {hf_token}"
+
+        response = http_requests.post(api_url, headers=headers, json={"inputs": texts, "options": {"wait_for_model": True}}, timeout=60)
+        response.raise_for_status()
+        embeddings = np.array(response.json(), dtype="float32")
+        return embeddings
+
+    def _encode(self, texts: List[str]) -> np.ndarray:
+        """
+        Encode texts into embeddings. Uses local model or HF API depending on mode.
+        """
+        if not self.lightweight and self.model:
+            return self.model.encode(texts, convert_to_numpy=True)
+        else:
+            return self._embed_via_hf_api(texts)
 
     def load_index(self):
         """
@@ -85,16 +128,16 @@ class VectorDB:
 
         texts = [chunk["text_en"] for chunk in chunks]
         logger.info(f"Generating embeddings for {len(texts)} chunks...")
-        
+
         # Generate embeddings
-        embeddings = self.model.encode(texts, convert_to_numpy=True)
-        
+        embeddings = self._encode(texts)
+
         # Normalize vectors for cosine similarity (Inner Product of normalized vectors = Cosine Similarity)
         faiss.normalize_L2(embeddings)
-        
+
         # Add to index
         self.index.add(embeddings.astype("float32"))
-        
+
         # Store metadata
         for idx, chunk in enumerate(chunks):
             # Extract and store metadata mapping
@@ -107,7 +150,7 @@ class VectorDB:
                 "content_en_raw": chunk.get("content_en_raw", "")
             }
             self.metadata.append(meta)
-            
+
         self.save_index()
 
     def clear(self):
@@ -133,22 +176,22 @@ class VectorDB:
             return []
 
         # Generate query embedding
-        query_vector = self.model.encode([query], convert_to_numpy=True)
+        query_vector = self._encode([query])
         faiss.normalize_L2(query_vector)
-        
+
         # Search FAISS index
         scores, indices = self.index.search(query_vector.astype("float32"), top_k * 3) # Over-fetch for filtering
-        
+
         results = []
         scores = scores[0]
         indices = indices[0]
-        
+
         for idx, score in zip(indices, scores):
             if idx == -1 or idx >= len(self.metadata):
                 continue
-                
+
             meta = self.metadata[idx]
-            
+
             # Apply metadata filters if provided
             if filters:
                 match = True
@@ -168,8 +211,8 @@ class VectorDB:
                 "text_ja": meta["text_ja"],
                 "content_en_raw": meta["content_en_raw"]
             })
-            
+
             if len(results) >= top_k:
                 break
-                
+
         return results
