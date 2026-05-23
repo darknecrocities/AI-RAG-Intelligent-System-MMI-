@@ -93,13 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error("Health check returned error");
       const health = await response.json();
       
-      // Update Ollama badge
+      // Update HF Space badge
       if (health.ollama_connected) {
         badgeOllama.className = "health-badge ok";
-        badgeOllama.querySelector(".badge-label").textContent = "Ollama: Connected";
+        badgeOllama.querySelector(".badge-label").textContent = "HF Space: Connected";
       } else {
         badgeOllama.className = "health-badge error";
-        badgeOllama.querySelector(".badge-label").textContent = "Ollama: Disconnected";
+        badgeOllama.querySelector(".badge-label").textContent = "HF Space: Disconnected";
       }
       
       // Update Redis badge
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("System health check failed:", error);
       badgeOllama.className = "health-badge error";
-      badgeOllama.querySelector(".badge-label").textContent = "Ollama: Offline";
+      badgeOllama.querySelector(".badge-label").textContent = "HF Space: Offline";
       badgeRedis.className = "health-badge error";
       badgeRedis.querySelector(".badge-label").textContent = "Cache: Error";
     }

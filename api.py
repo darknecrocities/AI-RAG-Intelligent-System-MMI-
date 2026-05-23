@@ -15,7 +15,7 @@ from translator import TranslationEngine
 from chunker import semantic_chunk_document
 from vector_db import VectorDB
 from retriever import HybridRetriever
-from llm import OllamaEngine
+from llm import HuggingFaceEngine
 from cache_manager import CacheManager
 
 # Configure logging
@@ -50,7 +50,7 @@ cache_manager = CacheManager()
 translation_engine = TranslationEngine()
 vector_db = VectorDB()
 retriever = HybridRetriever(vector_db)
-llm_engine = OllamaEngine()
+llm_engine = HuggingFaceEngine()
 crawler = WebCrawler()
 
 # Keep track of ingestion state
@@ -287,14 +287,14 @@ def health_check():
     """
     System status and database size.
     """
-    ollama_ok = llm_engine._check_ollama_connection()
+    hf_ok = llm_engine._check_hf_connection()
     redis_ok = cache_manager.redis_available
     vector_count = vector_db.index.ntotal if vector_db.index else 0
     crawl_cache_count = len(crawler.cache)
     
     return {
-        "status": "healthy" if ollama_ok else "degraded",
-        "ollama_connected": ollama_ok,
+        "status": "healthy" if hf_ok else "degraded",
+        "ollama_connected": hf_ok,
         "redis_connected": redis_ok,
         "vector_store_chunks": vector_count,
         "crawled_pages": crawl_cache_count,

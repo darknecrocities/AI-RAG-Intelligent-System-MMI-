@@ -3,9 +3,8 @@ import os
 # Base URL for the target website to crawl
 BASE_URL = "https://www.mmi-sc.co.jp/"
 
-# Ollama local connection settings
-OLLAMA_API_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
+# Hugging Face Space Settings
+HF_SPACE_URL = os.getenv("HF_SPACE_URL", "Darknecrocities/mmi2")
 
 
 # Embeddings and Reranking models
