@@ -132,14 +132,17 @@ python chatbot.py
 - **Option 1**: Start a full crawl & build a new vector index. Run this on your first execution to populate the database.
 - **Option 2**: Jump straight to chat using the existing database index.
 
-### Option B: The Web UI Dashboard & FastAPI Server
-1. **Start the API Server**:
-   ```bash
-   uvicorn api:app --host 127.0.0.1 --port 8000 --reload
-   ```
+### Option B: The Web UI Dashboard & FastAPI Server (Backend & Frontend)
+To start the backend server (which automatically serves the frontend dashboard at `http://127.0.0.1:8000/`), use the unified local launcher script:
+```bash
+./run_local.sh
+```
+*This script will automatically release port 8000 (killing any orphan processes), ensure Ollama has the correct model pulled (`llama3.2`), activate your virtual environment, and launch the web server.*
+
 2. **Access the Dashboard**:
    Open your browser and navigate to:
    👉 **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+
 
 #### Web Dashboard Features:
 - 📊 **Control Center**: Trigger recursive crawls and monitor ingestion progress (e.g., crawled page counts, vectors generated) in real-time.
