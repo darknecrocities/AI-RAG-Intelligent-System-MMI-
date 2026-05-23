@@ -1,0 +1,18 @@
+[
+  {
+    "url": "https://www.mmi-sc.co.jp/aws",
+    "title": "AWS Partnership",
+    "section": "AWS Integration",
+    "text_en": "Source: https://www.mmi-sc.co.jp/aws\nTitle: AWS Partnership\nSection: AWS Integration\n\nMMI is an AWS Partner providing cloud DICOM gateway software.",
+    "text_ja": "MMIはAWSパートナーで、DICOMゲートウェイを提供しています。",
+    "content_en_raw": "MMI is an AWS Partner providing cloud DICOM gateway software."
+  },
+  {
+    "url": "https://www.mmi-sc.co.jp/about",
+    "title": "Company Outline",
+    "section": "Outline",
+    "text_en": "Source: https://www.mmi-sc.co.jp/about\nTitle: Company Outline\nSection: Outline\n\nMMI was founded in 1985 and is headquartered in Tokyo, Japan.",
+    "text_ja": "MMIは1985年に設立され、東京に本社があります。",
+    "content_en_raw": "MMI was founded in 1985 and is headquartered in Tokyo, Japan."
+  }
+]

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMI-KNOWLEDGE RAG SYSTEM</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+  <!-- Background Decorative Blurs -->
+  <div class="blob blob-purple"></div>
+  <div class="blob blob-blue"></div>
+
+  <div class="app-container">
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+          <line x1="12" y1="22.08" x2="12" y2="12" />
+        </svg>
+        <div class="logo-text">
+          <h1>MMI-KNOWLEDGE</h1>
+          <span class="sub-logo">RAG ASSISTANT</span>
+        </div>
+      </div>
+      
+      <!-- System Health Indicators -->
+      <div class="health-indicators">
+        <div class="health-badge" id="badge-ollama">
+          <span class="indicator-dot"></span>
+          <span class="badge-label">Ollama: Checking...</span>
+        </div>
+        <div class="health-badge" id="badge-redis">
+          <span class="indicator-dot"></span>
+          <span class="badge-label">Cache: Checking...</span>
+        </div>
+        <div class="health-badge" id="badge-vectors">
+          <span class="indicator-dot"></span>
+          <span class="badge-label">Chunks: 0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="workspace">
+      
+      <!-- Left Panel: Control Center -->
+      <section class="panel control-panel">
+        <div class="panel-header">
+          <h2>Control Center</h2>
+          <span class="panel-icon">⚙️</span>
+        </div>
+        <div class="panel-body">
+          
+          <!-- Ingestion Card -->
+          <div class="control-card">
+            <h3>Knowledge Ingestion</h3>
+            <p class="card-desc">Crawl the MMI website and ingest content into the local FAISS database.</p>
+            
+            <div class="options-group">
+              <label class="checkbox-container">
+                <input type="checkbox" id="check-force-crawl">
+                <span class="checkmark"></span>
+                Force Re-crawl (Bypass cache)
+              </label>
+              <label class="checkbox-container">
+                <input type="checkbox" id="check-clear-index">
+                <span class="checkmark"></span>
+                Clear database before indexing
+              </label>
+            </div>
+            
+            <button id="btn-ingest" class="btn btn-primary">
+              <span class="btn-text">Start Crawl & Ingestion</span>
+              <span class="btn-spinner hidden"></span>
+            </button>
+          </div>
+
+          <!-- Ingestion Status Card -->
+          <div class="control-card" id="status-card">
+            <h3>Ingestion Status</h3>
+            <div class="status-indicator">
+              <span class="status-label">Status:</span>
+              <span class="status-val idle" id="ingest-status-text">Idle</span>
+            </div>
+            
+            <div class="progress-bar-container hidden" id="ingest-progress-container">
+              <div class="progress-bar-fill" id="ingest-progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-num" id="stat-pages">0</span>
+                <span class="stat-lbl">Pages Crawled</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num" id="stat-chunks">0</span>
+                <span class="stat-lbl">Chunks Embedded</span>
+              </div>
+            </div>
+
+            <div class="status-footer text-muted" id="stat-last-run">
+              Last ingestion: Never
+            </div>
+          </div>
+
+          <!-- Quick Prompts Card -->
+          <div class="control-card">
+            <h3>Suggested Questions</h3>
+            <div class="suggested-queries">
+              <button class="query-chip">What is MMI's corporate philosophy?</button>
+              <button class="query-chip">Tell me about MMI's AWS Marketplace product</button>
+              <button class="query-chip">When was MMI founded and what is its history?</button>
+              <button class="query-chip">What is MMI's environmental policy?</button>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Center Panel: Chat Interface -->
+      <section class="panel chat-panel">
+        <div class="panel-header">
+          <h2>RAG Knowledge Chat</h2>
+          <!-- Query Parameter Controls -->
+          <div class="chat-options">
+            <label class="checkbox-container inline">
+              <input type="checkbox" id="check-stream" checked>
+              <span class="checkmark"></span>
+              Stream Response
+            </label>
+            <button id="btn-clear-chat" class="btn-icon-text" title="Clear chat history">
+              <span>🧹</span> Clear Chat
+            </button>
+          </div>
+        </div>
+        
+        <!-- Chat History -->
+        <div class="chat-messages" id="chat-messages-container">
+          <!-- Welcome Message -->
+          <div class="message assistant welcome">
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+              <h3>Welcome to the MMI Knowledge Assistant</h3>
+              <p>I can answer questions regarding the business, philosophy, technology divisions, and history of <strong>株式会社マン・マシンインターフェース (Man Machine Interface)</strong>.</p>
+              <p>To begin, ensure you have ran the crawler to ingest content from <a href="https://www.mmi-sc.co.jp/" target="_blank">mmi-sc.co.jp</a>, or simply type your questions below!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+          <form id="chat-form" class="chat-form">
+            <textarea 
+              id="chat-input" 
+              placeholder="Ask a question about MMI... (Shift+Enter for new line)" 
+              rows="1" 
+              required
+            ></textarea>
+            <button type="submit" id="btn-send" class="btn-send" title="Send message">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Right Panel: Citations & Sources -->
+      <section class="panel citations-panel">
+        <div class="panel-header">
+          <h2>Grounded Citations</h2>
+          <span class="panel-icon">📚</span>
+        </div>
+        <div class="panel-body" id="citations-container">
+          <div class="empty-citations-state">
+            <div class="empty-citations-icon">🔍</div>
+            <p>Ask a question to see the retrieved ground-truth sources and relevance scores here.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
