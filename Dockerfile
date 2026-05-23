@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set working directory
 WORKDIR /app
 
-# Enable lightweight mode (uses HF Inference API instead of local PyTorch models)
-ENV LIGHTWEIGHT_MODE=true
+# Enable lightweight mode (uses local CPU PyTorch for embeddings but no CrossEncoder/LLM)
+ENV LIGHTWEIGHT_MODE=false
 
 # Copy lean requirements and install dependencies (no PyTorch!)
 COPY requirements-render.txt .

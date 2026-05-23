@@ -1,5 +1,5 @@
-# Lightweight requirements for Render deployment (no PyTorch/sentence-transformers)
-# Uses HuggingFace Inference API for embeddings instead of local models
+# Lightweight requirements for Render deployment
+# We will use sentence-transformers locally, but explicitly install the CPU version of torch to save disk space and memory.
 fastapi>=0.100.0
 uvicorn>=0.22.0
 sse-starlette>=1.6.0
@@ -12,3 +12,6 @@ faiss-cpu>=1.7.4
 numpy>=1.24.0
 redis>=5.0.0
 gradio_client>=0.16.0
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2+cpu
+sentence-transformers>=2.2.0
