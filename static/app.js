@@ -2,7 +2,7 @@
 
 // Set this to your backend Render URL (e.g. "https://mmi-rag-backend.onrender.com") if hosting the frontend on Vercel.
 // Otherwise, keep it empty "" to use the same host.
-const API_BASE_URL = "";
+const API_BASE_URL = "https://ai-rag-intelligent-system-mmi.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
