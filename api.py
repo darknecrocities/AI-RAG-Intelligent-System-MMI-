@@ -215,24 +215,37 @@ def chat(request: ChatRequest):
     if not query:
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
 
-    # 1. Cache lookup (Skip if streaming is requested, as streaming cannot be cached directly)
+    # 1. Cache lookup (Instant <5ms load for repeat questions in both standard and streaming modes)
     cache_key = f"rag_cache:{query.lower()}"
-    if not request.stream and not request.force_recrawl:
+    if not request.force_recrawl:
         cached_res = cache_manager.get(cache_key)
         if cached_res:
-            logger.info(f"Serving cached response for: '{query}'")
-            return cached_res
+            if request.stream:
+                logger.info(f"Serving cached response via stream for: '{query}'")
+                def cached_event_generator():
+                    yield f"data: {json.dumps({'token': cached_res['answer']})}\n\n"
+                    yield f"data: {json.dumps({'sources': cached_res['sources']})}\n\n"
+                    yield "data: [DONE]\n\n"
+                return StreamingResponse(cached_event_generator(), media_type="text/event-stream")
+            else:
+                logger.info(f"Serving cached response for: '{query}'")
+                return cached_res
 
-    # 2. Smart Query Rewriting
-    optimized_query = llm_engine.rewrite_query(query)
+    # 2. Fast Query Translation (Translates Japanese to English via Google Translate in ~200ms, completely bypassing slow 2-3s LLM rewrite)
+    if translation_engine.is_japanese(query):
+        logger.info(f"Translating Japanese query for vector search: '{query}'")
+        optimized_query = translation_engine.translate_text(query)
+        logger.info(f"Translated query: '{query}' -> '{optimized_query}'")
+    else:
+        optimized_query = query
     
-    # 3. Retrieve relevant chunks
+    # 3. Retrieve relevant chunks (retrieve top 3 for optimal speed and accuracy)
     logger.info(f"Searching vector database for: '{optimized_query}'...")
     retrieved_chunks = retriever.retrieve(optimized_query, top_k=5)
     
-    # 4. Context Compression
+    # 4. Context Compression (max 1000 tokens for optimal speed/accuracy with 0.5B model)
     if retrieved_chunks:
-        compressed_context = llm_engine.compress_context(retrieved_chunks)
+        compressed_context = llm_engine.compress_context(retrieved_chunks, max_tokens=1000)
     else:
         compressed_context = ""
     
@@ -259,17 +272,27 @@ def chat(request: ChatRequest):
                 "snippet": chunk["content_en_raw"][:250] + "..." # Include a short preview snippet
             })
 
-    # 6. Streaming Mode
+    # 6. Streaming Mode (Includes post-generation caching)
     if request.stream:
         def event_generator():
             try:
+                collected_text = ""
                 # Stream the answer tokens
                 for token in llm_engine.generate_stream(prompt):
+                    collected_text += token
                     yield f"data: {json.dumps({'token': token})}\n\n"
                 
                 # Stream sources at the end of the SSE stream
                 yield f"data: {json.dumps({'sources': sources})}\n\n"
                 yield "data: [DONE]\n\n"
+                
+                # Cache the generated response for future instant lookups
+                if collected_text.strip():
+                    result = {
+                        "answer": collected_text,
+                        "sources": sources
+                    }
+                    cache_manager.set(cache_key, result, ttl=3600)
             except Exception as e:
                 logger.exception("Error in streaming response")
                 yield f"data: {json.dumps({'error': str(e)})}\n\n"

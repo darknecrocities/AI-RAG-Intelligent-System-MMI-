@@ -81,11 +81,13 @@ class HuggingFaceEngine:
         everything (system instructions, context, history, and query) into one string.
         """
         system_prefix = (
-            "You are a helpful, enthusiastic, and highly knowledgeable enterprise assistant for MMI (株式会社マン・マシンインターフェース, Man Machine Interface).\n"
-            "INSTRUCTIONS:\n"
-            "1. If the question is conversational, reply naturally, warmly, and briefly based on the CHAT HISTORY.\n"
-            "2. If the question is about the company, its products, services, or philosophy, answer using ONLY the provided CONTEXT. "
-            "If the information is not present in the CONTEXT, politely explain that you don't have that specific information right now.\n\n"
+            "You are a factual enterprise assistant for MMI (株式会社マン・マシンインターフェース, Man Machine Interface Co., Ltd.).\n"
+            "STRICT RULES:\n"
+            "1. Answer ONLY using facts from the CONTEXT block below. Do NOT use any prior knowledge or training data about people, names, or titles.\n"
+            "2. If a specific fact (e.g. a person's name, role, address, number) is NOT explicitly stated word-for-word in the CONTEXT, say: 'I don't have that specific information in my current knowledge base.'\n"
+            "3. NEVER guess, infer, or fabricate names, titles, dates, or numbers. Copy them verbatim from the CONTEXT.\n"
+            "4. For conversational questions (greetings, thanks), respond naturally and briefly.\n"
+            "5. Respond in the same language as the user's question.\n\n"
         )
         
         user_content = system_prefix
@@ -126,17 +128,32 @@ class HuggingFaceEngine:
 
     def generate_stream(self, prompt_data: Dict) -> Generator[str, None, None]:
         """
-        Streams response tokens back in Real-time.
-        Since /predict is a non-streaming endpoint, we call it synchronously
-        and yield the full response as a single chunk.
+        Streams response tokens back in Real-time using delta outputs from the Gradio client Job.
         """
         try:
-            response = self.client.predict(
+            import time
+            job = self.client.submit(
                 message=prompt_data["message"],
                 api_name="/predict"
             )
-            yield response
-                        
+            
+            printed_len = 0
+            while not job.done():
+                outputs = job.outputs()
+                if outputs:
+                    latest = outputs[-1]
+                    if len(latest) > printed_len:
+                        delta = latest[printed_len:]
+                        yield delta
+                        printed_len = len(latest)
+                time.sleep(0.05)
+                
+            # Yield any final remaining text after job completion
+            outputs = job.outputs()
+            if outputs:
+                latest = outputs[-1]
+                if len(latest) > printed_len:
+                    yield latest[printed_len:]
         except Exception as e:
             logger.error(f"Streaming error from HF Space: {e}")
             yield f"\n[Error communicating with Hugging Face Space: {e}]"

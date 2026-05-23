@@ -20,6 +20,10 @@ def ingest_json_data():
     logger.info(f"Loaded {len(data)} translation entries. Chunking...")
     
     for ja_text, en_text in data.items():
+        # Skip extremely short entries (less than 150 characters) which are just page titles or navigation breadcrumbs
+        if len(en_text.strip()) < 150:
+            continue
+            
         doc = {
             "url": "local-json-cache",
             "title": "MMI Translated Content",

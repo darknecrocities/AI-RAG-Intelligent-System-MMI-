@@ -93,6 +93,8 @@ def run_tests():
 
     # 5. Test Embeddings and Vector DB
     try:
+        import config
+        config.VECTOR_DB_PATH = "./data/test_faiss_index"
         import vector_db
         import chunker
         
@@ -159,6 +161,16 @@ def run_tests():
     except Exception as e:
         logger.error(f"✗ LLM Engine test failed: {e}")
         return False
+
+    # Clean up test database directory
+    try:
+        import os
+        import shutil
+        if os.path.exists("./data/test_faiss_index"):
+            shutil.rmtree("./data/test_faiss_index")
+            logger.info("✓ Cleanup: Removed temporary test FAISS directory.")
+    except Exception as e:
+        logger.warning(f"Failed to remove test FAISS directory: {e}")
 
     logger.info("=== ALL CODE COMPONENT TESTS PASSED SUCCESSFULLY! ===")
     return True

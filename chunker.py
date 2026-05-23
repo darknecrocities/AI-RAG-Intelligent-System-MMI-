@@ -47,6 +47,11 @@ def semantic_chunk_document(
     # Align Japanese paragraphs if possible, otherwise use split paragraphs as well
     paragraphs_ja = content_ja.split("\n\n")
     
+    # If the document is too large but has only single newlines (no \n\n), split by single \n instead
+    if len(paragraphs_en) <= 1 and count_approx_tokens(content_en) > chunk_size:
+        paragraphs_en = [p.strip() for p in content_en.split("\n") if p.strip()]
+        paragraphs_ja = [p.strip() for p in content_ja.split("\n") if p.strip()]
+        
     # If paragraph count mismatch, we'll fall back to just splitting English, and keeping full Japanese context or mapping
     has_aligned = len(paragraphs_en) == len(paragraphs_ja)
     
