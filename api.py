@@ -1,4 +1,5 @@
 import json
+import asyncio
 import logging
 import time
 from typing import List, Dict, Optional
@@ -274,13 +275,15 @@ def chat(request: ChatRequest):
 
     # 6. Streaming Mode (Includes post-generation caching)
     if request.stream:
-        def event_generator():
+        async def event_generator():
             try:
                 collected_text = ""
-                # Stream the answer tokens
+                # Stream the answer tokens asynchronously
                 for token in llm_engine.generate_stream(prompt):
                     collected_text += token
                     yield f"data: {json.dumps({'token': token})}\n\n"
+                    # Yield control to the event loop to avoid blocking
+                    await asyncio.sleep(0)
                 
                 # Stream sources at the end of the SSE stream
                 yield f"data: {json.dumps({'sources': sources})}\n\n"
@@ -297,7 +300,6 @@ def chat(request: ChatRequest):
                 logger.exception("Error in streaming response")
                 yield f"data: {json.dumps({'error': str(e)})}\n\n"
                 yield "data: [DONE]\n\n"
-                
         return StreamingResponse(event_generator(), media_type="text/event-stream")
 
     # 7. Standard Mode

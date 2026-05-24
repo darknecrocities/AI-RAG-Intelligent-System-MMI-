@@ -2912,3 +2912,488 @@ Error from Ollama: 404'...
 2026-05-23 17:09:59,073 [INFO] llm: Successfully connected to local Ollama daemon.
 2026-05-23 17:10:07,073 [INFO] httpx: HTTP Request: GET http://localhost:11434/api/tags "HTTP/1.1 200 OK"
 2026-05-23 17:10:07,074 [INFO] llm: Successfully connected to local Ollama daemon.
+2026-05-23 20:47:00,076 [INFO] api: Initializing RAG System components...
+2026-05-23 20:47:00,101 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 20:47:00,106 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 20:47:00,106 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 20:47:00,153 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 20:47:00,155 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 20:47:00,581 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 20:47:00,584 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 20:47:00,584 [INFO] retriever: Loading Cross-Encoder model: ...
+2026-05-23 20:47:00,587 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 20:47:00,587 [WARNING] retriever: Failed to load Cross-Encoder from local cache ('NoneType' object has no attribute 'parameters'). Attempting online download/update...
+2026-05-23 20:47:00,587 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 20:47:00,587 [WARNING] retriever: Failed to load Cross-Encoder: 'NoneType' object has no attribute 'parameters'. Falling back to standard keyword-boosted cosine search.
+2026-05-23 20:47:00,920 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 20:47:01,227 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 20:47:02,355 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 20:47:03,786 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 20:47:03,818 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 20:47:04,077 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 20:47:04,810 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/0111c78d-b3da-4eec-9dd3-536c56da8429 "HTTP/1.1 200 OK"
+2026-05-23 21:11:08,304 [INFO] api: Initializing RAG System components...
+2026-05-23 21:11:08,351 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 21:11:08,354 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 21:11:08,355 [INFO] vector_db: LIGHTWEIGHT_MODE: Using HuggingFace Inference API for embeddings (no local model loaded).
+2026-05-23 21:11:08,358 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 21:11:08,358 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 21:11:08,762 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 21:11:09,024 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 21:11:09,951 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 21:11:11,506 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 21:11:11,510 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 21:11:11,761 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 21:11:12,420 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/d66cba01-17bc-4bb0-8442-95f4c5bd5ba6 "HTTP/1.1 200 OK"
+2026-05-23 21:11:17,779 [INFO] llm: Rewriting user query via HF Space...
+2026-05-23 21:11:18,859 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 21:11:19,884 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=d66cba01-17bc-4bb0-8442-95f4c5bd5ba6 "HTTP/1.1 200 OK"
+2026-05-23 21:11:19,889 [INFO] llm: Rewritten query: 'who are you?' -> 'Who am I?'
+2026-05-23 21:11:19,889 [INFO] api: Searching vector database for: 'Who am I?'...
+2026-05-23 21:11:19,900 [ERROR] api: Unhandled exception on /chat: HTTPSConnectionPool(host='api-inference.huggingface.co', port=443): Max retries exceeded with url: /pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2 (Caused by NameResolutionError("HTTPSConnection(host='api-inference.huggingface.co', port=443): Failed to resolve 'api-inference.huggingface.co' ([Errno 8] nodename nor servname provided, or not known)"))
+Traceback (most recent call last):
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 1106, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connection.py", line 211, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: HTTPSConnection(host='api-inference.huggingface.co', port=443): Failed to resolve 'api-inference.huggingface.co' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 842, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/urllib3/util/retry.py", line 543, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api-inference.huggingface.co', port=443): Max retries exceeded with url: /pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2 (Caused by NameResolutionError("HTTPSConnection(host='api-inference.huggingface.co', port=443): Failed to resolve 'api-inference.huggingface.co' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/fastapi/routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/fastapi/routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/fastapi/routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/fastapi/routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "/Users/arronkianparejas/RAG(MMI)/api.py", line 231, in chat
+    retrieved_chunks = retriever.retrieve(optimized_query, top_k=5)
+  File "/Users/arronkianparejas/RAG(MMI)/retriever.py", line 79, in retrieve
+    candidates = self.vector_db.search(query, top_k=fetch_k)
+  File "/Users/arronkianparejas/RAG(MMI)/vector_db.py", line 179, in search
+    query_vector = self._encode([query])
+  File "/Users/arronkianparejas/RAG(MMI)/vector_db.py", line 79, in _encode
+    return self._embed_via_hf_api(texts)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/vector_db.py", line 67, in _embed_via_hf_api
+    response = http_requests.post(api_url, headers=headers, json={"inputs": texts, "options": {"wait_for_model": True}}, timeout=60)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/api.py", line 134, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/api.py", line 71, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/arronkianparejas/RAG(MMI)/venv/lib/python3.13/site-packages/requests/adapters.py", line 729, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api-inference.huggingface.co', port=443): Max retries exceeded with url: /pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2 (Caused by NameResolutionError("HTTPSConnection(host='api-inference.huggingface.co', port=443): Failed to resolve 'api-inference.huggingface.co' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-05-23 22:09:19,645 [INFO] api: Initializing RAG System components...
+2026-05-23 22:09:19,674 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:09:19,679 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:09:19,680 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:09:19,693 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:09:19,693 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:09:19,886 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:09:19,889 [INFO] vector_db: Loaded FAISS index from disk. Contains 2 vectors.
+2026-05-23 22:09:19,889 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:09:21,215 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:09:23,009 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:09:24,136 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:09:25,689 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:09:25,691 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:09:25,943 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:09:26,567 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/a478d9db-ea2b-4340-b60e-206a9941569e "HTTP/1.1 200 OK"
+2026-05-23 22:09:29,294 [INFO] api: Initializing RAG System components...
+2026-05-23 22:09:29,338 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:09:29,342 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:09:29,343 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:09:29,362 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:09:29,363 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:09:29,695 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:09:29,699 [INFO] vector_db: Loaded FAISS index from disk. Contains 2 vectors.
+2026-05-23 22:09:29,699 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:09:31,068 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:09:35,411 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:09:36,528 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:09:37,873 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:09:37,875 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:09:38,129 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:09:38,761 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/0efda07f-c3a3-44cf-bb4e-d0f6ef91606f "HTTP/1.1 200 OK"
+2026-05-23 22:12:05,433 [INFO] api: Searching vector database for: 'who is the president of MMI?'...
+2026-05-23 22:12:05,700 [INFO] api: Generating response synchronously...
+2026-05-23 22:12:06,772 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 22:12:07,685 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=0efda07f-c3a3-44cf-bb4e-d0f6ef91606f "HTTP/1.1 200 OK"
+2026-05-23 22:13:36,880 [INFO] api: Initializing RAG System components...
+2026-05-23 22:13:36,914 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:13:36,918 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:13:36,918 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:13:36,941 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:13:36,942 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:13:37,163 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:13:37,164 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 22:13:37,165 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:13:37,579 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:13:37,851 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:13:38,838 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:13:40,263 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:13:40,265 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:13:40,527 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:13:41,182 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/9e44f340-8cf1-47f6-bb76-26fcd570d760 "HTTP/1.1 200 OK"
+2026-05-23 22:13:45,521 [INFO] api: Initializing RAG System components...
+2026-05-23 22:13:45,545 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:13:45,549 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:13:45,549 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:13:45,571 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:13:45,571 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:13:45,932 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:13:45,933 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 22:13:45,934 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:13:46,239 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:13:46,506 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:13:47,613 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:13:48,941 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:13:48,943 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:13:54,407 [INFO] api: Searching vector database for: 'who is the representative director of MMI?'...
+2026-05-23 22:13:54,546 [INFO] api: Generating response synchronously...
+2026-05-23 22:13:55,562 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 22:13:56,624 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=9e44f340-8cf1-47f6-bb76-26fcd570d760 "HTTP/1.1 200 OK"
+2026-05-23 22:13:59,621 [INFO] api: Searching vector database for: 'where is MMI headquarters located?'...
+2026-05-23 22:13:59,723 [INFO] api: Generating response synchronously...
+2026-05-23 22:14:00,652 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 22:14:01,721 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=9e44f340-8cf1-47f6-bb76-26fcd570d760 "HTTP/1.1 200 OK"
+2026-05-23 22:14:06,537 [INFO] api: Initializing RAG System components...
+2026-05-23 22:14:06,567 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:14:06,572 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:14:06,572 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:14:06,594 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:14:06,594 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:14:06,947 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:14:06,950 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 22:14:06,950 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:14:07,275 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:14:07,536 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:14:08,660 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:14:09,857 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:14:09,860 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:14:10,112 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:14:10,768 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/5433c838-b540-4227-91a7-5b20272f8b62 "HTTP/1.1 200 OK"
+2026-05-23 22:19:57,199 [INFO] api: Initializing RAG System components...
+2026-05-23 22:19:57,246 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:19:57,252 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:19:57,253 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:19:57,280 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:19:57,281 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:19:57,653 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:19:57,655 [INFO] vector_db: Loaded FAISS index from disk. Contains 2 vectors.
+2026-05-23 22:19:57,655 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:19:57,995 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:19:58,267 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:19:59,199 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:20:00,663 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:20:00,666 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:20:00,698 [INFO] RebuildDB: Starting database rebuild...
+2026-05-23 22:20:00,698 [INFO] api: Clearing FAISS Vector Database index...
+2026-05-23 22:20:00,699 [INFO] vector_db: Saved FAISS index with 0 vectors to disk.
+2026-05-23 22:20:00,699 [INFO] vector_db: Cleared FAISS index and metadata.
+2026-05-23 22:20:00,699 [INFO] api: Starting website crawling...
+2026-05-23 22:20:00,699 [INFO] crawler: Fetching JS script for dynamic links: https://www.mmi-sc.co.jp/common/js/header.js
+2026-05-23 22:20:00,923 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:20:01,121 [INFO] crawler: Fetching JS script for dynamic links: https://www.mmi-sc.co.jp/common/js/footer.js
+2026-05-23 22:20:01,401 [INFO] crawler: Starting crawl. Initial queue size: 15
+2026-05-23 22:20:01,401 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo/ee-division
+2026-05-23 22:20:01,602 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/44dd4e13-89b6-412d-a0aa-1103317ac870 "HTTP/1.1 200 OK"
+2026-05-23 22:20:01,960 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo/ee-division
+2026-05-23 22:20:01,965 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/history
+2026-05-23 22:20:02,605 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/history
+2026-05-23 22:20:02,610 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/principle
+2026-05-23 22:20:03,184 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/principle
+2026-05-23 22:20:03,190 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/
+2026-05-23 22:20:03,462 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/
+2026-05-23 22:20:03,465 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo
+2026-05-23 22:20:04,012 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo
+2026-05-23 22:20:04,016 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr/sdgs
+2026-05-23 22:20:04,592 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr/sdgs
+2026-05-23 22:20:04,599 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo/ss-division
+2026-05-23 22:20:05,266 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo/ss-division
+2026-05-23 22:20:05,276 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/access
+2026-05-23 22:20:05,834 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/access
+2026-05-23 22:20:05,837 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/lduinfo
+2026-05-23 22:20:06,475 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/lduinfo
+2026-05-23 22:20:06,479 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/privacy
+2026-05-23 22:20:07,025 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/privacy
+2026-05-23 22:20:07,032 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr
+2026-05-23 22:20:07,596 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr
+2026-05-23 22:20:07,602 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr/environment
+2026-05-23 22:20:08,160 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr/environment
+2026-05-23 22:20:08,165 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/outline
+2026-05-23 22:20:08,714 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/outline
+2026-05-23 22:20:08,721 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about
+2026-05-23 22:20:09,278 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about
+2026-05-23 22:20:09,281 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/recruit
+2026-05-23 22:20:09,835 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/recruit
+2026-05-23 22:20:09,851 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/lduinfo.html
+2026-05-23 22:20:10,116 [WARNING] crawler: Failed to fetch https://www.mmi-sc.co.jp/about/lduinfo.html: status 404
+2026-05-23 22:20:10,117 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo/ee-division...
+2026-05-23 22:20:10,143 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo/ee-division...
+2026-05-23 22:20:10,144 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/history...
+2026-05-23 22:20:10,160 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/history...
+2026-05-23 22:20:10,160 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/principle...
+2026-05-23 22:20:10,170 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/principle...
+2026-05-23 22:20:10,170 [INFO] api: Processing content for https://www.mmi-sc.co.jp/...
+2026-05-23 22:20:10,186 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/...
+2026-05-23 22:20:10,186 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo...
+2026-05-23 22:20:10,194 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo...
+2026-05-23 22:20:10,194 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr/sdgs...
+2026-05-23 22:20:10,220 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr/sdgs...
+2026-05-23 22:20:10,220 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo/ss-division...
+2026-05-23 22:20:10,232 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo/ss-division...
+2026-05-23 22:20:10,232 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/access...
+2026-05-23 22:20:10,242 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/access...
+2026-05-23 22:20:10,242 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/lduinfo...
+2026-05-23 22:20:10,248 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/lduinfo...
+2026-05-23 22:20:10,249 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/privacy...
+2026-05-23 22:20:10,266 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/privacy...
+2026-05-23 22:20:11,051 [WARNING] translator: Translation attempt 1 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:12,781 [WARNING] translator: Translation attempt 2 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:15,500 [WARNING] translator: Translation attempt 3 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:15,500 [ERROR] translator: Translation failed after 3 attempts.
+2026-05-23 22:20:15,502 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr...
+2026-05-23 22:20:15,521 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr...
+2026-05-23 22:20:15,521 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr/environment...
+2026-05-23 22:20:15,534 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr/environment...
+2026-05-23 22:20:15,534 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/outline...
+2026-05-23 22:20:15,545 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/outline...
+2026-05-23 22:20:15,545 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about...
+2026-05-23 22:20:15,552 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about...
+2026-05-23 22:20:15,552 [INFO] api: Processing content for https://www.mmi-sc.co.jp/recruit...
+2026-05-23 22:20:15,583 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/recruit...
+2026-05-23 22:20:16,320 [WARNING] translator: Translation attempt 1 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:18,059 [WARNING] translator: Translation attempt 2 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:20,810 [WARNING] translator: Translation attempt 3 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:20:20,811 [ERROR] translator: Translation failed after 3 attempts.
+2026-05-23 22:20:20,814 [INFO] api: Adding 15 new chunks to FAISS vector store...
+2026-05-23 22:20:20,814 [INFO] vector_db: Generating embeddings for 15 chunks...
+2026-05-23 22:20:21,191 [INFO] vector_db: Saved FAISS index with 15 vectors to disk.
+2026-05-23 22:20:21,191 [INFO] api: Ingestion completed successfully in 20.49 seconds.
+2026-05-23 22:20:21,191 [INFO] RebuildDB: Rebuild completed: {'status': 'success', 'pages_processed': 15, 'chunks_added': 15, 'duration_seconds': 20.49}
+2026-05-23 22:22:31,994 [INFO] api: Initializing RAG System components...
+2026-05-23 22:22:32,031 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:22:32,035 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:22:32,036 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:22:32,054 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:22:32,055 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:22:32,382 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:22:32,384 [INFO] vector_db: Loaded FAISS index from disk. Contains 44 vectors.
+2026-05-23 22:22:32,384 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:22:32,683 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:22:32,951 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:22:33,841 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:22:35,200 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:22:35,205 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:22:35,233 [INFO] RebuildDB: Starting database rebuild...
+2026-05-23 22:22:35,233 [INFO] api: Clearing FAISS Vector Database index...
+2026-05-23 22:22:35,234 [INFO] vector_db: Saved FAISS index with 0 vectors to disk.
+2026-05-23 22:22:35,234 [INFO] vector_db: Cleared FAISS index and metadata.
+2026-05-23 22:22:35,234 [INFO] api: Starting website crawling...
+2026-05-23 22:22:35,234 [INFO] crawler: Fetching JS script for dynamic links: https://www.mmi-sc.co.jp/common/js/header.js
+2026-05-23 22:22:35,262 [INFO] crawler: Fetching JS script for dynamic links: https://www.mmi-sc.co.jp/common/js/footer.js
+2026-05-23 22:22:35,269 [INFO] crawler: Starting crawl. Initial queue size: 15
+2026-05-23 22:22:35,269 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/access
+2026-05-23 22:22:35,467 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:22:35,561 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/access
+2026-05-23 22:22:35,569 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/lduinfo
+2026-05-23 22:22:36,108 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/6f46bb36-4b7d-438c-a224-4ccabe648179 "HTTP/1.1 200 OK"
+2026-05-23 22:22:36,111 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/lduinfo
+2026-05-23 22:22:36,115 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/history
+2026-05-23 22:22:36,419 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/history
+2026-05-23 22:22:36,428 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr
+2026-05-23 22:22:37,023 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr
+2026-05-23 22:22:37,026 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/recruit
+2026-05-23 22:22:37,575 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/recruit
+2026-05-23 22:22:37,587 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo/ee-division
+2026-05-23 22:22:38,150 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo/ee-division
+2026-05-23 22:22:38,158 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/
+2026-05-23 22:22:38,457 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/
+2026-05-23 22:22:38,458 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about
+2026-05-23 22:22:39,004 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about
+2026-05-23 22:22:39,006 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/principle
+2026-05-23 22:22:39,543 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/principle
+2026-05-23 22:22:39,548 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo
+2026-05-23 22:22:40,304 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo
+2026-05-23 22:22:40,307 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr/environment
+2026-05-23 22:22:40,857 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr/environment
+2026-05-23 22:22:40,862 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/csr/sdgs
+2026-05-23 22:22:41,417 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/csr/sdgs
+2026-05-23 22:22:41,426 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/techinfo/ss-division
+2026-05-23 22:22:41,962 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/techinfo/ss-division
+2026-05-23 22:22:41,967 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/outline
+2026-05-23 22:22:42,528 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/outline
+2026-05-23 22:22:42,534 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/privacy
+2026-05-23 22:22:43,073 [INFO] crawler: Page unmodified (304): https://www.mmi-sc.co.jp/about/privacy
+2026-05-23 22:22:43,081 [INFO] crawler: Crawling URL: https://www.mmi-sc.co.jp/about/lduinfo.html
+2026-05-23 22:22:43,089 [WARNING] crawler: Failed to fetch https://www.mmi-sc.co.jp/about/lduinfo.html: status 404
+2026-05-23 22:22:43,089 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/access...
+2026-05-23 22:22:43,105 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/access...
+2026-05-23 22:22:43,106 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/lduinfo...
+2026-05-23 22:22:43,113 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/lduinfo...
+2026-05-23 22:22:43,113 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/history...
+2026-05-23 22:22:43,129 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/history...
+2026-05-23 22:22:43,129 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr...
+2026-05-23 22:22:43,142 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr...
+2026-05-23 22:22:43,142 [INFO] api: Processing content for https://www.mmi-sc.co.jp/recruit...
+2026-05-23 22:22:43,174 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/recruit...
+2026-05-23 22:22:43,899 [WARNING] translator: Translation attempt 1 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:45,626 [WARNING] translator: Translation attempt 2 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:48,344 [WARNING] translator: Translation attempt 3 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:48,344 [ERROR] translator: Translation failed after 3 attempts.
+2026-05-23 22:22:48,346 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo/ee-division...
+2026-05-23 22:22:48,363 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo/ee-division...
+2026-05-23 22:22:48,363 [INFO] api: Processing content for https://www.mmi-sc.co.jp/...
+2026-05-23 22:22:48,381 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/...
+2026-05-23 22:22:48,381 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about...
+2026-05-23 22:22:48,389 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about...
+2026-05-23 22:22:48,389 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/principle...
+2026-05-23 22:22:48,400 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/principle...
+2026-05-23 22:22:48,400 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo...
+2026-05-23 22:22:48,410 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo...
+2026-05-23 22:22:48,410 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr/environment...
+2026-05-23 22:22:48,426 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr/environment...
+2026-05-23 22:22:48,426 [INFO] api: Processing content for https://www.mmi-sc.co.jp/csr/sdgs...
+2026-05-23 22:22:48,452 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/csr/sdgs...
+2026-05-23 22:22:48,454 [INFO] api: Processing content for https://www.mmi-sc.co.jp/techinfo/ss-division...
+2026-05-23 22:22:48,468 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/techinfo/ss-division...
+2026-05-23 22:22:48,468 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/outline...
+2026-05-23 22:22:48,481 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/outline...
+2026-05-23 22:22:48,482 [INFO] api: Processing content for https://www.mmi-sc.co.jp/about/privacy...
+2026-05-23 22:22:48,503 [INFO] api: Translating Japanese content for https://www.mmi-sc.co.jp/about/privacy...
+2026-05-23 22:22:49,211 [WARNING] translator: Translation attempt 1 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:50,940 [WARNING] translator: Translation attempt 2 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:53,657 [WARNING] translator: Translation attempt 3 failed: Request exception can happen due to an api connection error. Please check your connection and try again
+2026-05-23 22:22:53,658 [ERROR] translator: Translation failed after 3 attempts.
+2026-05-23 22:22:53,660 [INFO] api: Adding 23 new chunks to FAISS vector store...
+2026-05-23 22:22:53,660 [INFO] vector_db: Generating embeddings for 23 chunks...
+2026-05-23 22:22:53,981 [INFO] vector_db: Saved FAISS index with 23 vectors to disk.
+2026-05-23 22:22:53,982 [INFO] api: Ingestion completed successfully in 18.75 seconds.
+2026-05-23 22:22:53,982 [INFO] RebuildDB: Rebuild completed: {'status': 'success', 'pages_processed': 15, 'chunks_added': 23, 'duration_seconds': 18.75}
+2026-05-23 22:23:20,961 [INFO] api: Initializing RAG System components...
+2026-05-23 22:23:20,996 [INFO] cache_manager: Connecting to Redis at redis://localhost:6379/0...
+2026-05-23 22:23:21,000 [WARNING] cache_manager: Redis is unavailable: Error 61 connecting to localhost:6379. Connection refused.. Falling back to In-Memory cache.
+2026-05-23 22:23:21,000 [INFO] vector_db: Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+2026-05-23 22:23:21,018 [INFO] sentence_transformers.base.model: No device provided, using mps
+2026-05-23 22:23:21,019 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-23 22:23:21,234 [INFO] vector_db: Successfully loaded embedding model from local cache.
+2026-05-23 22:23:21,236 [INFO] vector_db: Loaded FAISS index from disk. Contains 37 vectors.
+2026-05-23 22:23:21,236 [INFO] retriever: Cross-Encoder reranking disabled (lightweight mode or no model configured).
+2026-05-23 22:23:21,528 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2 "HTTP/1.1 200 OK"
+2026-05-23 22:23:21,790 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/spaces/Darknecrocities/mmi2/runtime "HTTP/1.1 200 OK"
+2026-05-23 22:23:22,895 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/config "HTTP/1.1 200 OK"
+2026-05-23 22:23:23,991 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/info?serialize=False "HTTP/1.1 200 OK"
+2026-05-23 22:23:23,994 [INFO] llm: Successfully connected to Hugging Face Space at Darknecrocities/mmi2.
+2026-05-23 22:23:24,250 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/telemetry/py_client/initiated "HTTP/1.1 200 OK"
+2026-05-23 22:23:24,895 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/heartbeat/bea52595-f4ba-4574-9055-11fb7693b082 "HTTP/1.1 200 OK"
+2026-05-23 22:23:30,538 [INFO] api: Searching vector database for: 'who is the representative director of MMI?'...
+2026-05-23 22:23:30,638 [INFO] llm: Context compressed: hit token limit.
+2026-05-23 22:23:31,547 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 22:23:32,454 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=bea52595-f4ba-4574-9055-11fb7693b082 "HTTP/1.1 200 OK"
+2026-05-23 22:23:39,070 [INFO] api: Searching vector database for: 'where is MMI headquarters located?'...
+2026-05-23 22:23:39,129 [INFO] llm: Context compressed: hit token limit.
+2026-05-23 22:23:40,012 [INFO] httpx: HTTP Request: POST https://darknecrocities-mmi2.hf.space/gradio_api/queue/join "HTTP/1.1 200 OK"
+2026-05-23 22:23:40,901 [INFO] httpx: HTTP Request: GET https://darknecrocities-mmi2.hf.space/gradio_api/queue/data?session_hash=bea52595-f4ba-4574-9055-11fb7693b082 "HTTP/1.1 200 OK"
