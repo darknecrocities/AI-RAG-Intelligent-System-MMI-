@@ -65,8 +65,8 @@ class HybridRetriever:
     def retrieve(
         self, 
         query: str, 
-        top_k: int = 5, 
-        fetch_k: int = 12
+        top_k: int = 3, 
+        fetch_k: int = 8
     ) -> List[Dict]:
         """
         Performs hybrid retrieval:

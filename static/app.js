@@ -324,8 +324,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = JSON.parse(dataStr);
                 if (data.token) {
                   collectedText += data.token;
-                  assistantContent.innerHTML = parseMarkdown(collectedText);
-                  scrollChatToBottom();
+                  
+                  // Use requestAnimationFrame for smoother DOM updates and parsing
+                  if (!window.pendingRender) {
+                    window.pendingRender = true;
+                    requestAnimationFrame(() => {
+                      assistantContent.innerHTML = parseMarkdown(collectedText);
+                      scrollChatToBottom();
+                      window.pendingRender = false;
+                    });
+                  }
                 } else if (data.sources) {
                   renderCitations(data.sources);
                 } else if (data.error) {

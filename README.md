@@ -186,4 +186,14 @@ To deploy to a persistent container service:
 4. **Environment Variables** (Optional):
    - You can customize configuration items by setting environment variables matching those in `config.py` (e.g. `OLLAMA_MODEL`, `REDIS_URL`, `DATA_DIR`).
 
+---
+
+## ⚡ Performance Optimizations
+Recent enhancements have been applied to optimize UI rendering, LLM inference speed, and server throughput:
+
+- **Async Streaming & Event Loop Handling**: SSE streams rely on Python generators wrapped in an asynchronous event loop (`asyncio.sleep`) to prevent connection blocking.
+- **Frontend Render Batching**: `requestAnimationFrame` prevents browser UI freezes while compiling real-time markdown parsed streams by aligning DOM updates with monitor refresh rates.
+- **Reduced Retrieval K (top_k=3)**: Limits the LLM context compression load, directly dropping Time To First Token (TTFT).
+- **Concurrency Support**: Scaled FastAPI connections utilizing `uvicorn --workers 4`.
+- **System Healthchecks**: Native container health checks (`curl -f /health`) auto-restart unresponsive instances during deployment.
 

@@ -242,7 +242,7 @@ def chat(request: ChatRequest):
     
     # 3. Retrieve relevant chunks (retrieve top 3 for optimal speed and accuracy)
     logger.info(f"Searching vector database for: '{optimized_query}'...")
-    retrieved_chunks = retriever.retrieve(optimized_query, top_k=5)
+    retrieved_chunks = retriever.retrieve(optimized_query, top_k=3)
     
     # 4. Context Compression (max 1000 tokens for optimal speed/accuracy with 0.5B model)
     if retrieved_chunks:
